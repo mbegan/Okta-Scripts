@@ -1,4 +1,5 @@
-﻿$oktaVerbose = $true
+﻿Import-Module okta
+$oktaVerbose = $true
 $org = 'prod'
 
 #Get the ID of your admin application, easiest way i know is to run a report
