@@ -5,38 +5,6 @@ $org = 'prod'
 #Get all the active Apps within the org
 $activeapps = oktaGetActiveApps -oOrg $org
 
-$col1 = New-Object System.Collections.ArrayList
-foreach ($app in $activeapps)
-{
-    #fetch the groups that are used to assign the app to users
-    $appgroups = oktaGetAppGroups -oOrg $org -AppId $app.id
-    if ($appgroups)
-    {
-        foreach($group in $appgroups)
-        {
-            try
-            {
-                #fetch the details of the group
-                $oktagroup = oktaGetGroupbyId -oOrg $org -groupId $group.id
-            }
-            catch
-            {
-                Write-Error "group didn't exist?"
-            }
-
-            $params = @{ Application = $app
-                         Priority = $group.priority
-                         Updated = $group.lastUpdated
-                         Group = $oktagroup
-                       }
-            $_c = $col1.add($params)
-        }
-    } else {
-            $params = @{ Application = $app; Priority = 0 }
-            $_c = $col1.add($params)
-    }
-}
-
 function AppDetails()
 {
     param
@@ -161,23 +129,66 @@ function AppDetails()
     }
 }
 
+$col1 = New-Object System.Collections.ArrayList
+foreach ($app in $activeapps)
+{
+    #fetch the groups that are used to assign the app to users
+    $appgroups = oktaGetAppGroups -oOrg $org -AppId $app.id
+    if ($appgroups)
+    {
+        foreach($group in $appgroups)
+        {
+            try
+            {
+                #fetch the details of the group
+                $oktagroup = oktaGetGroupbyId -oOrg $org -groupId $group.id
+            }
+            catch
+            {
+                Write-Error "group didn't exist?"
+            }
+
+            $params = @{ Application = $app
+                         Priority = $group.priority
+                         Updated = $group.lastUpdated
+                         Group = $oktagroup
+                       }
+            $_c = $col1.add($params)
+        }
+    } else {
+            $params = @{ Application = $app
+                         Priority = 0
+                         Updated = $null
+                         Group = $false
+                       }
+            $_c = $col1.add($params)
+    }
+}
+
 $col2 = new-object System.Collections.ArrayList
 foreach ($c in $col1)
 {
     $param = @{ AppID = $c.Application.id
-                Application = $c.Application.name
-                Description = $c.Application.label
-                AssignmentPriority = $c.Priority
-                appSignOnMOde = $c.Application.signOnMode
-                appUserNameTemplate = $c.Application.credentials.userNameTemplate.template
-                appDetail = (AppDetails -app $c.Application)
-                GroupClass = $c.Group.ObjectClass[0]
-                GroupName = $C.Group.profile.name
-                GroupDesc = $C.Group.profile.description
-                GroupID = $C.Group.id
-              }
+            Application = $c.Application.name
+            AssignmentPriority = $c.Priority
+            Description = $c.Application.label
+            appSignOnMOde = $c.Application.signOnMode
+            appUserNameTemplate = $c.Application.credentials.userNameTemplate.template
+            appDetail = (AppDetails -app $c.Application)
+            GroupClass = $null
+            GroupName = 'NoGroup'
+            GroupDesc = $null
+            GroupID = $null
+            }
+    if ($c.Group)
+    {
+        $param.GroupClass = $c.Group.ObjectClass[0]
+        $param.GroupName = $C.Group.profile.name
+        $param.GroupDesc = $C.Group.profile.description
+        $param.GroupID = $C.Group.id
+    }
     $row = New-Object psobject -Property $param
     $_c  = $col2.add($row)
 }
 
-$col2 | Export-Csv -Path OktaAppReport.csv -NoTypeInformation
+$col2 | Select AppID,Application,AssignmentPriority,Description,appSignOnMOde,appUserNameTemplate,appDetail,GroupID,GroupName,GroupDesc,GroupClass | Export-Csv -Path OktaAppReport.csv -NoTypeInformation
