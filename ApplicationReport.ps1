@@ -169,17 +169,20 @@ $col2 = new-object System.Collections.ArrayList
 foreach ($c in $col1)
 {
     $param = @{ AppID = $c.Application.id
-            Application = $c.Application.name
-            AssignmentPriority = $c.Priority
-            Description = $c.Application.label
-            appSignOnMOde = $c.Application.signOnMode
-            appUserNameTemplate = $c.Application.credentials.userNameTemplate.template
-            appDetail = (AppDetails -app $c.Application)
-            GroupClass = $null
-            GroupName = 'NoGroup'
-            GroupDesc = $null
-            GroupID = $null
-            }
+                Application = $c.Application.name
+                AssignmentPriority = $c.Priority
+                Description = $c.Application.label
+                appSignOnMOde = $c.Application.signOnMode
+                appUserNameTemplate = $c.Application.credentials.userNameTemplate.template
+                appVpnNotification = $c.Application.settings.notifications.vpn.network.connection
+                appHideWeb = $c.Application.visibility.hide.web
+                appHideMobile = $c.Application.visibility.hide.iOS
+                appDetail = (AppDetails -app $c.Application)
+                GroupClass = $null
+                GroupName = 'NoGroup'
+                GroupDesc = $null
+                GroupID = $null
+              }
     if ($c.Group)
     {
         $param.GroupClass = $c.Group.ObjectClass[0]
@@ -191,4 +194,4 @@ foreach ($c in $col1)
     $_c  = $col2.add($row)
 }
 
-$col2 | Select AppID,Application,AssignmentPriority,Description,appSignOnMOde,appUserNameTemplate,appDetail,GroupID,GroupName,GroupDesc,GroupClass | Export-Csv -Path OktaAppReport.csv -NoTypeInformation
+$col2 | Select AppID,Application,AssignmentPriority,Description,appSignOnMOde,appUserNameTemplate,appVpnNotification,appHideWeb,appHideMobile,appDetail,GroupID,GroupName,GroupDesc,GroupClass | Export-Csv -Path OktaAppReport.csv -NoTypeInformation
