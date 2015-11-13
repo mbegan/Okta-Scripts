@@ -36,6 +36,58 @@ if ( [System.Management.Automation.ActionPreference]::SilentlyContinue -ne $Verb
     $oktaVerbose = $false
 }
 
+function userNameMatches()
+{
+    param
+    (
+        $app,
+        $appUser,
+        $oktaUser
+    )
+
+    [bool]$match = $false
+
+    switch ($app.credentials.userNameTemplate.template)
+    {
+        '${source.samAccountName}'
+        {
+            if ($oktaUser.profile.login.Split("@")[0].ToLower() -eq $AppUser.credentials.userName.ToLower() )
+            {
+                $match = $true
+            }
+        }
+        '${source.email}'
+        {
+            if ($oktaUser.profile.email.ToLower() -eq $AppUser.credentials.userName.ToLower() )
+            {
+                $Match = $true
+            }
+        }
+        '${source.login}'
+        {
+            if ($oktaUser.profile.login.ToLower() -eq $AppUser.credentials.userName.ToLower() )
+            {
+                $Match = $true
+            }
+            break
+        }
+        '${source.userName}'
+        {
+            if ($oktaUser.profile.login.ToLower() -eq $AppUser.credentials.userName.ToLower() )
+            {
+                $Match = $true
+            }    
+            break
+        }
+        default
+        {
+            #Real work required to match complex expressions
+            $match = $false
+        }
+    }
+    return $match
+}
+
 try
 {
     $app = oktaGetAppbyId -oOrg $oOrg -aid $AppID
@@ -132,7 +184,7 @@ foreach ($AppUser in $AppUsers)
     }
 
     ### Should detect username template $app.credentials.userNameTemplate.template !!!
-    if ($oktaUser.profile.login -ne $AppUser.credentials.userName)
+    if (!(userNameMatches -app $app -appUser $AppUser -oktaUser $oktaUser))
     {
         Write-Verbose ('No Match for ' + $oktaUser.profile.login + ' not equal to ' + $AppUser.credentials.userName)
         $line = @{ Reason = 'NoMatch'; id = $oktaUser.id; Login = $oktaUser.profile.login; BadLogin = $AppUser.credentials.userName }
