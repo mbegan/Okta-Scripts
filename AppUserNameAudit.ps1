@@ -123,7 +123,8 @@ catch
     throw $_.Exception.Message
 }
 
-$oktaUsers = New-Object System.Collections.ArrayList
+Write-Verbose ('creating a reference hash for users')
+$oktaUHash = New-Object System.Collections.Hashtable
 foreach ($agroup in $AppGroups)
 {
     $groupUsers = New-Object System.Collections.ArrayList
@@ -135,7 +136,7 @@ foreach ($agroup in $AppGroups)
     {
         throw $_.Exception.Message
     }
-    Write-Verbose ('getting all members of' + $group.profile.name + ' the ' + $agroup.priority + ' priority level group for ' + $app.label)
+    Write-Verbose ('getting all members of ' + $group.profile.name + ' the ' + $agroup.priority + ' priority level group out of ' + $AppGroups.Count + ' for ' + $app.label)
 
     try
     {
@@ -147,15 +148,11 @@ foreach ($agroup in $AppGroups)
     }
     foreach ($gu in $groupUsers)
     {
-        $_c = $oktaUsers.add($gu)
+        if (!$oktaUHash[$gu.id])
+        {
+            $_c = $oktaUHash.Add($gu.id,$gu)
+        }
     }
-}
-
-Write-Verbose ('creating a reference hash for users')
-$oktaUHash = New-Object System.Collections.Hashtable
-foreach ($u in $oktaUsers)
-{
-    $oktaUHash.Add($u.id,$u)
 }
 
 $report = New-Object System.Collections.ArrayList
@@ -187,7 +184,7 @@ foreach ($AppUser in $AppUsers)
     if (!(userNameMatches -app $app -appUser $AppUser -oktaUser $oktaUser))
     {
         Write-Verbose ('No Match for ' + $oktaUser.profile.login + ' not equal to ' + $AppUser.credentials.userName)
-        $line = @{ Reason = 'NoMatch'; id = $oktaUser.id; Login = $oktaUser.profile.login; BadLogin = $AppUser.credentials.userName }
+        $line = @{ Reason = 'NoMatch'; id = $oktaUser.id; status = $oktaUser.status; Login = $oktaUser.profile.login; BadLogin = $AppUser.credentials.userName }
         $row = New-Object psobject -Property $line
         $_c = $report.Add($row)
     }
@@ -196,12 +193,15 @@ foreach ($AppUser in $AppUsers)
 foreach ($uid in $oktaUHash.Keys)
 {
     $user = $oktaUHash[$uid]
-    $line = @{ Reason = 'Missing'; id = $user.id; Login = $user.profile.login; BadLogin = $null }
-    $row = New-Object psobject -Property $line
-    $_c = $report.Add($row)
+    if (!($user.status -eq 'DEPROVISIONED'))
+    {
+        $line = @{ Reason = 'Missing'; id = $user.id; status = $oktaUser.status; Login = $user.profile.login; BadLogin = $null }
+        $row = New-Object psobject -Property $line
+        $_c = $report.Add($row)
+    }
 }
 
 #restore verbosity
 $oktaVerbose = $curVerbosity
 
-return ($report | select Reason,id,Login,BadLogin)
+return ($report | select Reason,id,status,Login,BadLogin)
