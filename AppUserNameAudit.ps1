@@ -45,29 +45,35 @@ function userNameMatches()
         $oktaUser
     )
 
-    [bool]$match = $false
-
     switch ($app.credentials.userNameTemplate.template)
     {
         '${source.samAccountName}'
         {
             if ($oktaUser.profile.login.Split("@")[0].ToLower() -eq $AppUser.credentials.userName.ToLower() )
             {
-                $match = $true
+                $response = @{ match = [bool]$true }
+            } else {
+                $response = @{ match = [bool]$false; Login = $oktaUser.profile.login.Split("@")[0].ToLower(); BadLogin = $AppUser.credentials.userName.ToLower() }
             }
+            break
         }
         '${source.email}'
         {
             if ($oktaUser.profile.email.ToLower() -eq $AppUser.credentials.userName.ToLower() )
             {
-                $Match = $true
+                $response = @{ match = [bool]$true }
+            } else {
+                $response = @{ match = [bool]$false; Login = $oktaUser.profile.email.ToLower(); BadLogin = $AppUser.credentials.userName.ToLower() }
             }
+            break
         }
         '${source.login}'
         {
             if ($oktaUser.profile.login.ToLower() -eq $AppUser.credentials.userName.ToLower() )
             {
-                $Match = $true
+                $response = @{ match = [bool]$true }
+            } else {
+                $response = @{ match = [bool]$false; Login = $oktaUser.profile.login.ToLower(); BadLogin = $AppUser.credentials.userName.ToLower() }
             }
             break
         }
@@ -75,17 +81,19 @@ function userNameMatches()
         {
             if ($oktaUser.profile.login.ToLower() -eq $AppUser.credentials.userName.ToLower() )
             {
-                $Match = $true
+                $response = @{ match = [bool]$true }
+            } else {
+                $response = @{ match = [bool]$false; Login = $oktaUser.profile.login.ToLower(); BadLogin = $AppUser.credentials.userName.ToLower() }
             }    
             break
         }
         default
         {
             #Real work required to match complex expressions
-            $match = $false
+            $response = @{ match = [bool]$true }
         }
     }
-    return $match
+    return $response
 }
 
 try
@@ -181,10 +189,12 @@ foreach ($AppUser in $AppUsers)
     }
 
     ### Should detect username template $app.credentials.userNameTemplate.template !!!
-    if (!(userNameMatches -app $app -appUser $AppUser -oktaUser $oktaUser))
+    $Check = userNameMatches -app $app -appUser $AppUser -oktaUser $oktaUser
+    
+    if (!$Check.match)
     {
-        Write-Verbose ('No Match for ' + $oktaUser.profile.login + ' not equal to ' + $AppUser.credentials.userName)
-        $line = @{ Reason = 'NoMatch'; id = $oktaUser.id; status = $oktaUser.status; Login = $oktaUser.profile.login; BadLogin = $AppUser.credentials.userName }
+        Write-Verbose ('No Match for ' + $Check.Login + ' not equal to ' + $Check.BadLogin)
+        $line = @{ Reason = 'NoMatch'; id = $oktaUser.id; status = $oktaUser.status; Login = $check.Login; BadLogin = $check.BadLogin }
         $row = New-Object psobject -Property $line
         $_c = $report.Add($row)
     }
