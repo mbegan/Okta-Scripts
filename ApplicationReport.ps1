@@ -1,9 +1,40 @@
-﻿Import-Module Okta
-$oktaVerbose = $true
-$org = 'prod'
+﻿<#
+    .SYNOPSIS 
+        Generates a report of All active Applications and their associated assignment groups
+    .DESCRIPTION
+        Useful for generating a report of application ownership roles, saves results in a csv file
+    .EXAMPLE
+        ApplicationReport -oOrg prod
+        This command runs a report against the org defined 
+        as 'prod' the result of the report is {org}_ApplicationReport_{YYYYMMDD}.csv
+    .LINK
+        https://github.com/mbegan/Okta-Scripts
+        https://support.okta.com/help/community
+        http://developer.okta.com/docs/api/getting_started/design_principles.html
+#>
+Param
+(
+    [Parameter(Mandatory=$true)][alias('org','OktaOrg')][string]$oOrg
+)
+
+Import-Module Okta
+if (!(Get-Module Okta))
+{
+    throw 'Okta module not loaded...'
+}
+
+#preseve value
+$curVerbosity = $oktaVerbose
+
+if ( [System.Management.Automation.ActionPreference]::SilentlyContinue -ne $VerbosePreference )
+{
+    $oktaVerbose = $true
+} else {
+    $oktaVerbose = $false
+}
 
 #Get all the active Apps within the org
-$activeapps = oktaGetActiveApps -oOrg $org
+$activeapps = oktaGetActiveApps -oOrg $oOrg
 
 function AppDetails()
 {
@@ -133,7 +164,7 @@ $col1 = New-Object System.Collections.ArrayList
 foreach ($app in $activeapps)
 {
     #fetch the groups that are used to assign the app to users
-    $appgroups = oktaGetAppGroups -oOrg $org -AppId $app.id
+    $appgroups = oktaGetAppGroups -oOrg $oOrg -AppId $app.id
     if ($appgroups)
     {
         foreach($group in $appgroups)
@@ -141,7 +172,7 @@ foreach ($app in $activeapps)
             try
             {
                 #fetch the details of the group
-                $oktagroup = oktaGetGroupbyId -oOrg $org -groupId $group.id
+                $oktagroup = oktaGetGroupbyId -oOrg $oOrg -groupId $group.id
             }
             catch
             {
@@ -194,4 +225,11 @@ foreach ($c in $col1)
     $_c  = $col2.add($row)
 }
 
-$col2 | Select AppID,Application,AssignmentPriority,Description,appSignOnMOde,appUserNameTemplate,appVpnNotification,appHideWeb,appHideMobile,appDetail,GroupID,GroupName,GroupDesc,GroupClass | Export-Csv -Path OktaAppReport.csv -NoTypeInformation
+$fstamp = (Get-Date).ToString(“yyyyMMdd")
+$file = $env:TEMP + '\' + $oOrg + "_ApplicationReport_" + $fstamp + '.csv'
+
+$col2 | Select AppID,Application,AssignmentPriority,Description,appSignOnMOde,appUserNameTemplate,`
+ appVpnNotification,appHideWeb,appHideMobile,appDetail,GroupID,GroupName,GroupClass,GroupDesc `
+ | Export-Csv -Path ($file) -NoTypeInformation
+
+ . $file
