@@ -1,4 +1,0 @@
-#TYPE System.Management.Automation.PSCustomObject
-"userName"
-"mscott@varian.com"
-"bly@varian.com"
