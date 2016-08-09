@@ -8,15 +8,15 @@ $org = 'prod'
 $adminAppID = $oktaOrgs.$org.AdminAID
 
 #Collect a list of users that are assigned to the admin application
-$admins = oktaGetUsersbyAppID -oOrg prod -aid $oktaOrgs.prod.AdminAID
+$admins = oktaGetUsersbyAppID -oOrg $org -aid $oktaOrgs.prod.AdminAID
 
 $byUser = New-Object System.Collections.ArrayList
 
 #loop through the admins, retrieve their role(s)
 foreach ($a in $admins)
 {
-    $user = oktaGetUserbyID -oOrg prod -userName $a.id
-    $roles = oktaGetRolesByUserId -oOrg prod -uid $a.id
+    $user = oktaGetUserbyID -oOrg $org -userName $a.id
+    $roles = oktaGetRolesByUserId -oOrg $org -uid $a.id
     Add-Member -InputObject $user -MemberType NoteProperty -Name roles -Value $roles
 
     $_c = $byUser.Add($user)
