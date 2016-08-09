@@ -1,7 +1,11 @@
-﻿$Group = '00gzbdjvecVNYVGYHJJM'
-$org = 'prod'
+﻿Param
+(
+    [Parameter(Mandatory=$true)][alias('org','OktaOrg')][string]$oOrg
+)
 
-$AllUsers = oktaGetGroupMembersbyId -oOrg $org -gid $Group
+$Group = '00gzbdjvecVNYVGYHJJM'
+
+$AllUsers = oktaGetGroupMembersbyId -oOrg $oOrg -gid $Group
 $oktaVerbose = $true
 
 $factorProviders = 
@@ -123,7 +127,7 @@ function oktaGetFactorInfo()
 $FactorbyUser = New-Object System.Collections.Hashtable
 foreach ($u in $AllUsers)
 {
-    $factors = oktaGetFactorsbyUser -oOrg prod -uid $u.id
+    $factors = oktaGetFactorsbyUser -oOrg $oOrg -uid $u.id
     $samAccount = $u.profile.login.Split('@')[0].ToLower()
     $adUser = Get-ADUser -Identity $samAccount -Properties StreetAddress,l,st,c,employeeid,employeeGroup,employeeSubGroup,mail
     $hash = @{oktaUser = $u;adUser = $adUser;Factors = (oktaFactortoHash -factors $factors)}
@@ -189,7 +193,7 @@ function cleanupPendingFactors()
                         Write-Host $ukey -> $provider -> $type -> $factor.id is $factor.status
                         try
                         {
-                            oktaResetFactorbyUser -oOrg $org -uid $FactorbyUser[$ukey]['oktaUser'].id -fid $factor.id
+                            oktaResetFactorbyUser -oOrg $oOrg -uid $FactorbyUser[$ukey]['oktaUser'].id -fid $factor.id
                         }
                         catch
                         {

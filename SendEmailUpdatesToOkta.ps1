@@ -1,12 +1,16 @@
-﻿#This group is the 'All - Varian' Group, cleanest way to grab just active varian user accounts.
+﻿Param
+(
+    [Parameter(Mandatory=$true)][alias('org','OktaOrg')][string]$oOrg
+)
+
+#This group is the 'All - xxx' Group, cleanest way to grab just active xxx user accounts.
 $Group = '00gzbdjvecVNYVGYHJJM'
-$org = 'prod'
 
 #Get all the Okta users that are in the Group
-$VarianOktaUsers = oktaGetGroupMembersbyId -oOrg $org -gid $Group
+$VarianOktaUsers = oktaGetGroupMembersbyId -oOrg $oOrg -gid $Group
 
 #Get all the AD users profiles
-$VarianADUsers = oktaGetUsersbyAppID -oOrg prod -aid $oktaOrgs.$org.ProfileMaster
+$VarianADUsers = oktaGetUsersbyAppID -oOrg $oOrg -aid $oktaOrgs.$org.ProfileMaster
 
 #make a hashtable with the OktaUsers
 $vous = New-Object System.Collections.Hashtable
@@ -63,7 +67,7 @@ foreach ($user in $UserProfiles.Keys)
                 Write-Host ($user + "`t") -NoNewline
                 Write-Host ($UserProfiles[$user].Okta.profile.email.ToLower() + "`t" + $email )
                 $update = @{email = $email}
-                $UserProfiles[$user].NewOkta = oktaUpdateUserProfilebyID -oOrg $org -uid $UserProfiles[$user].Okta.id -Profile $update -partial
+                $UserProfiles[$user].NewOkta = oktaUpdateUserProfilebyID -oOrg $oOrg -uid $UserProfiles[$user].Okta.id -Profile $update -partial
             }
             catch
             {

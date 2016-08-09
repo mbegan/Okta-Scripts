@@ -1,4 +1,9 @@
-﻿$groups = oktaGetGroupsAll -oOrg prod
+﻿Param
+(
+    [Parameter(Mandatory=$true)][alias('org','OktaOrg')][string]$oOrg
+)
+
+$groups = oktaGetGroupsAll -oOrg $oOrg
 
 $col = New-Object System.Collections.ArrayList
 foreach ($g in $groups)

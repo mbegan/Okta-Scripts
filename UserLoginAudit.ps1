@@ -1,4 +1,9 @@
-﻿#$oktausers = oktaListUsers -oOrg prod
+﻿Param
+(
+    [Parameter(Mandatory=$true)][alias('org','OktaOrg')][string]$oOrg
+)
+
+$oktausers = oktaListUsers -oOrg $oOrg
 
 $buckets = New-Object System.Collections.Hashtable
 

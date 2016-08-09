@@ -1,6 +1,11 @@
-﻿Import-Module okta
+﻿Param
+(
+    [Parameter(Mandatory=$true)][alias('org','OktaOrg')][string]$oOrg
+)
+
+Import-Module okta
 $oktaVerbose = $true
-$org = 'prod'
+
 
 #Get the ID of your admin application, easiest way i know is to run a report
 #filter the report by 'Okta Administration' the appid is printed along with every action
@@ -8,15 +13,15 @@ $org = 'prod'
 $adminAppID = $oktaOrgs.$org.AdminAID
 
 #Collect a list of users that are assigned to the admin application
-$admins = oktaGetUsersbyAppID -oOrg prod -aid $oktaOrgs.$org.AdminAID
+$admins = oktaGetUsersbyAppID -oOrg $oOrg -aid $oktaOrgs.$org.AdminAID
 
 $byUser = New-Object System.Collections.ArrayList
 
 #loop through the admins, retrieve their role(s)
 foreach ($a in $admins)
 {
-    $user = oktaGetUserbyID -oOrg prod -userName $a.id
-    $roles = oktaGetRolesByUserId -oOrg prod -uid $a.id
+    $user = oktaGetUserbyID -oOrg $oOrg -userName $a.id
+    $roles = oktaGetRolesByUserId -oOrg $oOrg -uid $a.id
     Add-Member -InputObject $user -MemberType NoteProperty -Name roles -Value $roles
 
     $_c = $byUser.Add($user)
