@@ -10,10 +10,10 @@ $oktaVerbose = $true
 #Get the ID of your admin application, easiest way i know is to run a report
 #filter the report by 'Okta Administration' the appid is printed along with every action
 #cheat like I do an expand your okta org definition to keep quick tabs on it 
-$adminAppID = $oktaOrgs.$org.AdminAID
+$adminAppID = $oktaOrgs.$oOrg.AdminAID
 
 #Collect a list of users that are assigned to the admin application
-$admins = oktaGetUsersbyAppID -oOrg $oOrg -aid $oktaOrgs.$org.AdminAID
+$admins = oktaGetUsersbyAppID -oOrg $oOrg -aid $oktaOrgs.$oOrg.AdminAID
 
 $byUser = New-Object System.Collections.ArrayList
 
