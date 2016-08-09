@@ -8,7 +8,7 @@ $org = 'prod'
 $adminAppID = $oktaOrgs.$org.AdminAID
 
 #Collect a list of users that are assigned to the admin application
-$admins = oktaGetUsersbyAppID -oOrg prod -aid $oktaOrgs.prod.AdminAID
+$admins = oktaGetUsersbyAppID -oOrg prod -aid $oktaOrgs.$org.AdminAID
 
 $byUser = New-Object System.Collections.ArrayList
 

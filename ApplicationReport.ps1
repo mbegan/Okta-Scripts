@@ -14,7 +14,13 @@
 #>
 Param
 (
-    [Parameter(Mandatory=$true)][alias('org','OktaOrg')][string]$oOrg
+    [Parameter(Mandatory=$false)]
+        [alias('org','OktaOrg')]
+        [string]$oOrg=$oktaDefOrg,
+    [Parameter(Mandatory=$false)]
+        [ValidateLength(20,20)]
+        [alias('aid','appid')]
+        [string]$ApplicationID
 )
 
 Import-Module Okta
@@ -33,8 +39,13 @@ if ( [System.Management.Automation.ActionPreference]::SilentlyContinue -ne $Verb
     $oktaVerbose = $false
 }
 
-#Get all the active Apps within the org
-$activeapps = oktaGetActiveApps -oOrg $oOrg
+#Get all the Apps within the org
+if ($ApplicationID)
+{
+    $apps = oktaGetAppbyId -oOrg $oOrg -aid $ApplicationID
+} else {
+    $apps = oktaGetActiveApps -oOrg $oOrg
+}
 
 function AppDetails()
 {
@@ -161,7 +172,7 @@ function AppDetails()
 }
 
 $col1 = New-Object System.Collections.ArrayList
-foreach ($app in $activeapps)
+foreach ($app in $apps)
 {
     #fetch the groups that are used to assign the app to users
     $appgroups = oktaGetAppGroups -oOrg $oOrg -AppId $app.id
