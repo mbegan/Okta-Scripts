@@ -1,6 +1,6 @@
 ﻿Param
 (
-    [Parameter(Mandatory=$true)][alias('org','OktaOrg')][string]$oOrg
+    [Parameter(Mandatory=$true)][alias('org','OktaOrg')][string]$oOrg=$oktaDefOrg
 )
 
 Import-Module okta
