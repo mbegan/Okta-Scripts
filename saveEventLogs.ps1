@@ -92,8 +92,9 @@ while ($daystofetch -gt 0)
     $events = oktaListEvents -oOrg $oOrg -since $since -until $until -after $after
     foreach ($event in $events)
     {
+	$pubd = $event.published.ToString("o")
         $out = "OktaEvent_" + $oOrg + "_"
-        $out += $event.published.Substring(0,10)
+        $out += $pubd.Substring(0,10)
         $out += ".jsonl"
         $line = ConvertTo-Json -InputObject $event -Depth 12 -Compress
         Add-Content -Value $line -Path $out
