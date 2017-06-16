@@ -92,7 +92,12 @@ while ($daystofetch -gt 0)
     $events = oktaListEvents -oOrg $oOrg -since $since -until $until -after $after
     foreach ($event in $events)
     {
-	$pubd = $event.published.ToString("o")
+        if ($event.published -is [DateTime])
+        {      
+	        $pubd = $event.published.ToString("o")
+        } else {
+            $pubd = $event.published.ToString()
+        }
         $out = "OktaEvent_" + $oOrg + "_"
         $out += $pubd.Substring(0,10)
         $out += ".jsonl"
