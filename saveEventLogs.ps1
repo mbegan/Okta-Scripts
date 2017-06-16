@@ -21,14 +21,18 @@ Param
 )
 
 #jsonlines
-try
+
+if (Test-Path -Path (".state_" + $oOrg))
 {
-    $state = Get-Content -Path (".state_" + $oOrg) -ErrorAction Continue
-    $state = ConvertFrom-Json -InputObject $state[-1]
-}
-catch
-{
-    Write-Debug("No existing .state file found")
+    try
+    {
+        $state = Get-Content -Path (".state_" + $oOrg) -ErrorAction Continue
+        $state = ConvertFrom-Json -InputObject $state[-1]
+    }
+    catch
+    {
+        Write-Debug("No existing .state file found")
+    }
 }
 
 if ($state.until)
