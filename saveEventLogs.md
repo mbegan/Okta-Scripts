@@ -14,17 +14,28 @@ saveEventLogs is a powershell script written to collect and store logs from [Okt
 
 1. Follow these instructions to download and configure the [Okta-PSModule](https://github.com/mbegan/Okta-PSModule/blob/master/README.md)
     - Make note of the org name you use
+    - Mine is called 'matt'
 2. Download and Save the [saveEventLogs.ps1](https://github.com/mbegan/Okta-Scripts/blob/master/saveEventLogs.ps1) to your computer
+    - Mine lives in `C:\Users\username\Documents\WindowsPowerShell\Modules\Okta-Scripts`
 3. Create a directory where you'd like to store your logs
-
-### Important things
-
-* **bold words in a list** this is where things are
-* **bold words in a list 2** other stuff to consider
+    - Mine lives in `C:\logs\`
 
 ## Running the Script
 
-- [A link to a thing in a list using dash instaead of star](#http://www.google.com)
+1. Open a command prompt or terminal window
+2. Change to the directory you want to store you logs in
+    ```
+    cd C:\logs
+    ```
+3. Execute the script (replace script location, orgname and startDate with your values)
+    ```
+    powershell -file C:\Users\username\Documents\WindowsPowerShell\Modules\Okta-Scripts -oOrg matt -startDate 2017-01-01
+    ```
+
+### Immportant details
+* **bold words in a list** this is where things are
+* **bold words in a list 2** other stuff to consider
+
 
 ### Less immportant details
 
