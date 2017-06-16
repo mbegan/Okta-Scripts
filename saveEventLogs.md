@@ -38,7 +38,7 @@ saveEventLogs is a powershell script written to collect and store logs from [Okt
 #### Ongoing Collection
 When the script executes it will look in its current directory for a .state_<orgname> file, if found the startDate is retrieved from that file and the command line argument startDate value is ignored
 
-#### create symlinks
+#### Creating symlinks
 You may find it convienient to create a link to the script file
 
 1. Linux/Mac
