@@ -10,13 +10,13 @@ saveEventLogs is a powershell script written to collect and store logs from [Okt
 - events are saved in a text file using the [JSON Lines format](http://jsonlines.org/)
     - events are saved in a datestamped file based on the published time of the event
     - a datestamped file is only created if an event occured on that day
-    '''
-    1264 -rwxr--r--  1 matt  staff  644199 Jun 16 06:58 OktaEvent_matt_2017-06-01.jsonl
-    112 -rwxr--r--  1 matt  staff   57055 Jun 16 06:58 OktaEvent_matt_2017-06-02.jsonl
-    16 -rwxr--r--  1 matt  staff    6001 Jun 16 06:58 OktaEvent_matt_2017-06-05.jsonl
-    8 -rwxr--r--  1 matt  staff    3958 Jun 16 06:58 OktaEvent_matt_2017-06-07.jsonl
-    8 -rwxr--r--  1 matt  staff    3861 Jun 16 06:58 OktaEvent_matt_2017-06-09.jsonl
-    8 -rwxr--r--  1 matt  staff    3946 Jun 16 06:58 OktaEvent_matt_2017-06-13.jsonl
+    '''bash
+        1264 -rwxr--r--  1 matt  staff  644199 Jun 16 06:58 OktaEvent_matt_2017-06-01.jsonl
+        112 -rwxr--r--  1 matt  staff   57055 Jun 16 06:58 OktaEvent_matt_2017-06-02.jsonl
+        16 -rwxr--r--  1 matt  staff    6001 Jun 16 06:58 OktaEvent_matt_2017-06-05.jsonl
+        8 -rwxr--r--  1 matt  staff    3958 Jun 16 06:58 OktaEvent_matt_2017-06-07.jsonl
+        8 -rwxr--r--  1 matt  staff    3861 Jun 16 06:58 OktaEvent_matt_2017-06-09.jsonl
+        8 -rwxr--r--  1 matt  staff    3946 Jun 16 06:58 OktaEvent_matt_2017-06-13.jsonl
     '''
 - Feedback is welcome
 
