@@ -6,6 +6,9 @@
     .EXAMPLE
         This command will start a job that collects events from a defined org with a given startDate 
         the resulting events will be written into a timestamped file (based on published date of the event) OktaEvent_{oOrg}_{YYYY-MM-DD}.jsonl
+
+        powershell -file saveEventLogs.ps1 -oOrg <orgName> -startDate <YYYY-MM-DD>
+
     .LINK
         https://github.com/mbegan/Okta-Scripts
         https://support.okta.com/help/community
