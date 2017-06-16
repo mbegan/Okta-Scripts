@@ -29,29 +29,31 @@ saveEventLogs is a powershell script written to collect and store logs from [Okt
     ```
 3. Execute the script (replace script location, orgname and startDate with your values)
     ```
-    powershell -file C:\Users\username\Documents\WindowsPowerShell\Modules\Okta-Scripts -oOrg matt -startDate 2017-01-01
+    powershell -file C:\Users\username\Documents\WindowsPowerShell\Modules\Okta-Scripts\saveEvents.ps1 -oOrg matt -startDate 2017-01-01
     ```
 
-### Immportant details
-* **bold words in a list** this is where things are
-* **bold words in a list 2** other stuff to consider
+### Important file
+* **.state_org** The first time you run the script a file will be created called `.state_<orgname>`.  This file is used for ongoing collection and is used to keep track of the date and eventId of the last event retrieved.
 
+#### Ongoing Collection
+When the script executes it will look in its current directory for a .state_<orgname> file, if found the startDate is retrieved from that file and the command line argument startDate value is ignored
 
-### Less immportant details
+#### create symlinks
+You may find it convienient to create a link to the script file
 
-Blah blah blah
-
-#### Even less important here
-
-1. Look no hands
-
-    ```powershell
-    someCommand -option value -option2 value2
+1. Linux/Mac
+    ```bash
+    cd /logs
+    ln -s /users/username/.local/share/powershell/Modules/Okta-Scripts/saveEvents.ps1 .
     ```
+2. Windows
+    ```
+    cd C:\logs
+    mklink saveEvents.ps1 C:\Users\username\Documents\WindowsPowerShell\Modules\Okta-Scripts\saveEvents.ps1
+    ```
+    
 ## Scheduling the Script
 
-1. Look no hands
+1. Windows
 
-    ```powershell
-    someCommand -option value -option2 value2
-    ```
+2. Linux/Mac
