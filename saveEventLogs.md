@@ -32,7 +32,7 @@
 1. Follow these instructions to download and configure the [Okta-PSModule](https://github.com/mbegan/Okta-PSModule/blob/master/README.md)
     - Make note of the org name you use
     - Mine is called 'matt'
-1. Download and Save the [saveEventLogs.ps1](https://github.com/mbegan/Okta-Scripts/blob/master/saveEventLogs.ps1) or [saveEventLogsV2.ps1](https://github.com/mbegan/Okta-Scripts/blob/master/saveEventLogsV2.ps1)to your computer
+1. Download and Save the [saveEventLogs.ps1](https://raw.githubusercontent.com/mbegan/Okta-Scripts/master/saveEventLogs.ps1) or [saveEventLogsV2.ps1](https://raw.githubusercontent.com/mbegan/Okta-Scripts/master/saveEventLogsV2.ps1)to your computer
     - Mine lives in `C:\Users\username\Documents\WindowsPowerShell\Modules\Okta-Scripts`
 1. Create a directory where you'd like to store your logs
     - Mine lives in `C:\logs\`
