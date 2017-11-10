@@ -1,15 +1,17 @@
-﻿$userAgents = Import-Csv -Path C:\users\megan\Downloads\userAgents.csv
+﻿#$userAgents = Import-Csv -Path C:\users\megan\Downloads\userAgents.csv
+#$ipAddresses = Import-csv -Path C:\users\megan\Downloads\IPAddresses.csv
+$C2Fake = Import-Csv -Path /Users/matt/Downloads/clientstoFake.csv
 
-$ipAddresses = Import-csv -Path C:\users\megan\Downloads\IPAddresses.csv
-
-$users = @('matt.egan', 'mark.stevens','ed.king', 'eric.smith', 'hassen')
 
 $users = @('matt.egan', 'mark.stevens', 'megan')
+$users = @('mark.stevens')
+$users = @('matt.egan', 'mark.stevens','ed.king', 'eric.smith', 'hassen')
 
 
 $pwgood = 'Password3'
 $pwbadd = 'asdf1234'
 $org = $oktaDefOrg
+$org = "matt"
 $org = "okp1"
 
 $passwords = @( $pwgood, $pwgood, $pwgood, $pwbadd, $pwbadd, $pwgood, $pwgood, $pwbadd, $pwgood, $pwgood, $pwgood, $pwgood, $pwbadd, $pwbadd )
@@ -29,12 +31,12 @@ $loopCount = 1
 $loopMax = 1000
 while ($loopCount -le $loopMax)
 {   
-    $uanum = Get-Random -Minimum 0 -Maximum ($userAgents.Count)
-    $ipnum = Get-Random -Minimum 0 -Maximum ($ipAddresses.Count)
+    $uanum = Get-Random -Minimum 0 -Maximum ($C2Fake.Count)
+    $ipnum = Get-Random -Minimum 0 -Maximum ($C2Fake.Count)
     $unnum = Get-Random -Minimum 0 -Maximum ($users.Count)
 
-    $fakeUA = $userAgents[$uanum].useragent.ToString()
-    $fakeIP = $ipAddresses[$ipnum].ipaddress.ToString()
+    $fakeUA = $C2Fake[$uanum].'client.userAgent.rawUserAgent'.ToString()
+    $fakeIP = $C2Fake[$ipnum].'client.ipAddress'.ToString()
     $username = $users[$unnum].ToString()
 
     $altHeaders = New-Object System.Collections.Hashtable
@@ -124,5 +126,5 @@ while ($loopCount -le $loopMax)
     }
 
     $loopCount++
-    sleep -Milliseconds (Get-Random -Minimum 323 -Maximum 6464)
+    #sleep -Milliseconds (Get-Random -Minimum 323 -Maximum 6464)
 }

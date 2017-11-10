@@ -4,8 +4,6 @@
 )
 
 Import-Module okta
-$oktaVerbose = $true
-
 
 #Get the ID of your admin application, easiest way i know is to run a report
 #filter the report by 'Okta Administration' the appid is printed along with every action
@@ -13,7 +11,7 @@ $oktaVerbose = $true
 $adminAppID = $oktaOrgs.$oOrg.AdminAID
 
 #Collect a list of users that are assigned to the admin application
-$admins = oktaGetUsersbyAppID -oOrg $oOrg -aid $oktaOrgs.$oOrg.AdminAID
+$admins = oktaGetUsersbyAppID -oOrg $oOrg -aid $adminAppID
 
 $byUser = New-Object System.Collections.ArrayList
 

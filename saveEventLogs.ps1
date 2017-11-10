@@ -1,6 +1,6 @@
 ﻿<#
     .SYNOPSIS 
-        Retrieves logs from okta, converts them to jsonl format and saves them to a local file
+        Retrieves events from okta, converts them to jsonl format and saves them to a local file
     .DESCRIPTION
         Useful for extracting events from Okta and storing them locally
     .EXAMPLE
@@ -96,7 +96,7 @@ while ($daystofetch -gt 0)
     $since = $now.AddDays(($daystofetch *-1))
     $until = $since.AddDays(1)
     Write-Verbose("fetch logs from " + $since + " to " + $until)
-    $events = oktaListEvents -oOrg $oOrg -since $since -until $until -after $after
+    $events = oktaListEvents -oOrg $oOrg -since $since -until $until -after $after -verbose
     foreach ($event in $events)
     {
         if ($event.published -is [DateTime])
@@ -115,3 +115,5 @@ while ($daystofetch -gt 0)
     writeState -after $after -until $until -oOrg $oOrg
     $daystofetch--
 }
+
+$oktaVerbose = $curVerbosity
