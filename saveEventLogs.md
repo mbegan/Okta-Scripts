@@ -54,7 +54,7 @@
 
 ### Important file
 
-1. **.state_org** The first time you run the script a file will be created called `.state_<orgname>`.  This file is used for ongoing collection and is used to keep track of the date and eventId of the last event retrieved.
+1. **.state_orgname** (V1) or **.logState_orgname** (V2) The first time you run the script a file will be created called `.state_<orgname>` (V1) or `.logState_<orgname>` (V2).  This file is used for ongoing collection and is used to keep track of the date and eventId of the last event retrieved.
 
 #### Ongoing Collection
 
