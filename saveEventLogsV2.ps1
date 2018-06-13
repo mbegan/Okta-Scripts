@@ -7,12 +7,12 @@
         This command will start a job that collects logs from a defined org with a given startDate (since)
         the resulting events will be written into a timestamped file (based on published date of the log) OktaLog_{oOrg}_{YYYY-MM-DD}.jsonl
 
-        powershell -file saveEventLogs.ps1 -oOrg <orgName> -startDate <YYYY-MM-DD>
+        powershell -file saveEventLogsV2.ps1 -oOrg <orgName> -startDate <YYYY-MM-DD>
 
     .LINK
         https://github.com/mbegan/Okta-Scripts
         https://support.okta.com/help/community
-        http://developer.okta.com/docs/api/getting_started/design_principles.html
+        https://developer.okta.com/docs/api/getting_started/design_principles
 #>
 Param
 (
