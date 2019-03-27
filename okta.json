@@ -1,0 +1,5 @@
+{
+  "name": "Powershell script samples",
+  "description": "A collection of powershell scripts ranging from reporting to user creation and deletion.",
+  "categories": ["user management", "authentication", "authorization", "mfa", "sso", "apiAuthentication"]
+}
