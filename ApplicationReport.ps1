@@ -20,7 +20,11 @@ Param
     [Parameter(Mandatory=$false)]
         [ValidateLength(20,20)]
         [alias('aid','appid')]
-        [string]$ApplicationID
+        [string]$ApplicationID,
+        [Parameter(Mandatory=$false)]
+        [ValidateLength(1,255)]
+        [alias('appname')]
+        [string]$ApplicationName="amazon_aws_sso"
 )
 
 Import-Module Okta
@@ -237,10 +241,8 @@ foreach ($c in $col1)
 }
 
 $fstamp = (Get-Date).ToString(“yyyyMMdd")
-$file = $env:TEMP + '\' + $oOrg + "_ApplicationReport_" + $fstamp + '.csv'
+$file = $oOrg + "_ApplicationReport_" + $fstamp + '.csv'
 
 $col2 | Select AppID,Application,AssignmentPriority,Description,appSignOnMOde,appUserNameTemplate,`
  appVpnNotification,appHideWeb,appHideMobile,appDetail,GroupID,GroupName,GroupClass,GroupDesc `
  | Export-Csv -Path ($file) -NoTypeInformation
-
- . $file

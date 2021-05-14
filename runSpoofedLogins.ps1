@@ -1,6 +1,6 @@
 ﻿#$userAgents = Import-Csv -Path C:\users\megan\Downloads\userAgents.csv
 #$ipAddresses = Import-csv -Path C:\users\megan\Downloads\IPAddresses.csv
-$C2Fake = Import-Csv -Path /Users/matt/Downloads/clientstoFake.csv
+#$C2Fake = Import-Csv -Path /Users/mattegan/Downloads/c2fake.csv
 
 
 $users = @('matt.egan', 'mark.stevens', 'megan')

@@ -1,7 +1,7 @@
 Import-Module Okta
 
 $myOrg = 'okp1'
-$myAppId = '0oa1cz6mppvsqMnK21d8'
+$myAppId = '0oayn2rfhfOIGFOONCVL'
 $myLimit = 500
 $oktaVerbose=$true
 $myVerbose=$true
